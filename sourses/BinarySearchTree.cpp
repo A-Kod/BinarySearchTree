@@ -36,19 +36,20 @@ private:
     };
 
 public:
-
     BinarySearchTree();                                                              // конструктор по умолчанию
     BinarySearchTree(const std::initializer_list<T> & list);                         // конструктор, использующий список инициализации
     BinarySearchTree(const BinarySearchTree<T> & tree);                              // конструктор копирования
     BinarySearchTree(BinarySearchTree<T> && tree);                                   // конструктор перемещения
     ~BinarySearchTree();                                                             // деструктор
 
+    auto Insert_copy (Node *nd) noexcept -> void;                                    // для конструктора копирования
+    auto Clean (Node *nd) const noexcept -> void;                                    // для деструктора
     auto Root() const noexcept -> Node*;                                             // корень дерева
     auto Print (std::ostream & out,Node* nd,int level) const noexcept -> void;       // распечатать дерево
     auto Print_file (std::ofstream & out,Node* nd,int level) const noexcept -> void; // распечатать дерево
-  //  auto size() noexcept -> size_t;                                                  // определение размера
+    auto size() noexcept -> size_t;                                                  // определение размера
     auto insert(const T & value) noexcept -> bool;                                   // вставка нового звена
-    auto find(const T & value) noexcept -> bool;                                     // поиск элемента
+    auto find(const T & value) noexcept -> Node*;                                    // поиск элемента
     auto operator = (const BinarySearchTree<T> & tree) -> BinarySearchTree<T> &;     // оператор присваивания
     auto operator = (BinarySearchTree<T> && tree) -> BinarySearchTree<T> &;          // оператор перемещения
 };
@@ -78,23 +79,66 @@ BinarySearchTree<T>::BinarySearchTree(const std::initializer_list<T> & list)
 template <typename T>
 BinarySearchTree<T>::BinarySearchTree(const BinarySearchTree<T> & tree)
 {
-    // копируем корень дерева и количество элементов
-    this->root_ = tree.root_;
-    this->size_ = tree.size_;
+    delete root_;
+    root_ = nullptr;
+    size_ = 0;
+
+    Insert_copy (tree.Root());
 }
 
 // конструктор перемещения
 template <typename T>
-BinarySearchTree<T>::BinarySearchTree(BinarySearchTree<T> && tree)
+BinarySearchTree<T>::BinarySearchTree(BinarySearchTree<T> && tree) : size_(tree.size_), root_(tree.root_)
 {
-
+   tree.root_ = nullptr;
+   tree.size_ = 0;
 }
 
 // деструктор
 template <typename T>
 BinarySearchTree<T>::~BinarySearchTree()
 {
+   Clean(root_);
+}
 
+template <typename T>
+auto BinarySearchTree<T>::Insert_copy (Node *nd) noexcept -> void
+{
+    if(nd == nullptr)
+        return ;
+
+    insert(nd->value_);
+
+    if(nd->left_)
+    {
+        Insert_copy(nd->left_);
+    }
+
+    if(nd->right_)
+    {
+        Insert_copy(nd->right_);
+    }
+
+}
+
+template <typename T>
+auto BinarySearchTree<T>::Clean (Node *nd) const noexcept -> void
+{
+    if(nd == nullptr)
+        return ;
+
+    if(nd->left_)
+    {
+        Clean(nd->left_);
+        nd->left_ = nullptr;
+    }
+
+    if(nd->right_)
+    {
+        Clean(nd->right_);
+        nd->right_ = nullptr;
+    }
+    delete nd;
 }
 
 // корень дерева
@@ -109,7 +153,7 @@ auto BinarySearchTree<T>::Print (std::ostream & out,Node* nd,int level) const no
 {
     // если дерево пустое, то выходим
     if (nd== nullptr)
-        return;
+        return ;
     else
     {
         // левое поддерево
@@ -141,11 +185,11 @@ auto BinarySearchTree<T>::Print_file(std::ofstream & out,Node* nd,int level) con
 
 
 // количество узлов дерева
-//template <typename T>
-//auto BinarySearchTree<T>::size() noexcept -> size_t
-//{
- //   return size_;
-//}
+template <typename T>
+auto BinarySearchTree<T>::size() noexcept -> size_t
+{
+    return size_;
+}
 
 // вставка элемента в дерево
 template <typename T>
@@ -196,7 +240,7 @@ auto BinarySearchTree<T>:: insert(const T & value) noexcept -> bool
 
 // поиск элемента в дереве
 template <typename T>
-auto BinarySearchTree<T>::find(const T & value) noexcept -> bool
+auto BinarySearchTree<T>::find(const T & value) noexcept -> Node* //bool
 {
     // создаем указатель, который будет двигаться по дереву
     Node* current (root_);
@@ -207,7 +251,7 @@ auto BinarySearchTree<T>::find(const T & value) noexcept -> bool
         {
             // если двигаться влево уже не получится - элемент отсутствует в дереве
             if (current->left_== nullptr)
-              return false;
+              return nullptr;//false;
 
             // иначе - двигаемся дальше по дереву, в левый узел
             current = current->left_;
@@ -216,12 +260,13 @@ auto BinarySearchTree<T>::find(const T & value) noexcept -> bool
             if (value > current->value_) {
                 // если двигаться вправо уже не получится - элемент отсутствует в дереве
                 if (current->right_ == nullptr)
-                    return false;
+                    return nullptr;//false;
 
                 // иначе - двигаемся дальше по дереву, в правый узел
                 current = current->right_;
-            } else
-                return true;
+            }
+            else
+                return current; //true;
         }
     }
 }
@@ -241,7 +286,12 @@ auto BinarySearchTree<T>::operator = (const BinarySearchTree<T> & tree) -> Binar
 template <typename T>
 auto BinarySearchTree<T>::operator = (BinarySearchTree<T> && tree) -> BinarySearchTree<T> &
 {
+   this->root_ = tree.root_;
+   this->size_ = tree.size_;
 
+   // освобождаем память временного объекта
+   tree.root_ = nullptr;
+   tree.size_ = 0;
 }
 
 
@@ -250,6 +300,7 @@ template <typename T>
 std::ofstream & operator << (std::ofstream & out, const BinarySearchTree<T> & tree)
 {
     tree.Print_file(out,tree.Root(),0);
+    return out;
 }
 
 // вывод на консоль
@@ -257,6 +308,7 @@ template <typename T>
 std::ostream & operator << (std::ostream & out, const BinarySearchTree<T> & tree)
 {
     tree.Print(out,tree.Root(),0);
+    return out;
 }
 
 // ввод с консоли
@@ -266,4 +318,6 @@ std::istream & operator >> (std::istream & in, BinarySearchTree<T> & tree)
    T a;
    in >> a;
    tree.insert(a);
+   return in;
 }
+
