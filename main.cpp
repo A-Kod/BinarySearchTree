@@ -15,9 +15,6 @@ int main() {
     // выводим дерево на печать
     std::cout << tree << std::endl;
 
-    // количество узлов дерева
-    std::cout << "Range of tree - " << tree.size() << std::endl;
-
     // использование контструктора копирования
     BinarySearchTree <int> second = tree;
     std::cout << second << std::endl;
