@@ -46,7 +46,7 @@ public:
     auto Root() const noexcept -> Node*;                                             // корень дерева
     auto Print (std::ostream & out,Node* nd,int level) const noexcept -> void;       // распечатать дерево
     auto Print_file (std::ofstream & out,Node* nd,int level) const noexcept -> void; // распечатать дерево
-    auto size() noexcept -> size_t;                                                  // определение размера
+  //  auto size() noexcept -> size_t;                                                  // определение размера
     auto insert(const T & value) noexcept -> bool;                                   // вставка нового звена
     auto find(const T & value) noexcept -> bool;                                     // поиск элемента
     auto operator = (const BinarySearchTree<T> & tree) -> BinarySearchTree<T> &;     // оператор присваивания
@@ -141,11 +141,11 @@ auto BinarySearchTree<T>::Print_file(std::ofstream & out,Node* nd,int level) con
 
 
 // количество узлов дерева
-template <typename T>
-auto BinarySearchTree<T>::size() noexcept -> size_t
-{
-    return size_;
-}
+//template <typename T>
+//auto BinarySearchTree<T>::size() noexcept -> size_t
+//{
+ //   return size_;
+//}
 
 // вставка элемента в дерево
 template <typename T>
