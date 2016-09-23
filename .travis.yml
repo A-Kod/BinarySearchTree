@@ -4,6 +4,7 @@ language: cpp
 compiler:
   - clang
   - gcc
+  - clion
 # Build steps
 script:
   - mkdir build
