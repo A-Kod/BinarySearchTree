@@ -1,8 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
-
-#include "BinarySearchTree.cpp"
+#include "../include/BinarySearchTree.h"
+#include "../source/BinarySearchTree.cpp"
 
 int main() {
 
