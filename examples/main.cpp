@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
-#include "../include/BinarySearchTree.h"
+//#include "../include/BinarySearchTree.h"
 #include "../source/BinarySearchTree.cpp"
 
 int main() {
