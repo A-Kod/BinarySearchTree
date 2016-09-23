@@ -2,8 +2,6 @@
 language: cpp
 # Compiler selection
 compiler:
-  - clang
-  - gcc
   - clion
 # Build steps
 script:
