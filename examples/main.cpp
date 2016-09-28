@@ -4,16 +4,13 @@
 //#include "../include/BinarySearchTree.h"
 #include "../source/BinarySearchTree.cpp"
 
-int main() {
+iint main() {
 
     // создаем дерево с помощью списка инициализации
     BinarySearchTree <int> tree ({1,2,3,4,5});
 
     // читаем новый элемент дерева
     std::cin >> tree;
-    if (tree.find(3)==nullptr)
-        std::cout<<"not found"<<std::endl;
-    else std::cout<<tree.find(3)<<std::endl;
 
     // выводим дерево на печать
     std::cout << tree << std::endl;
@@ -21,12 +18,18 @@ int main() {
     // количество узлов дерева
     std::cout << "Range of first tree - " << tree.size() << std::endl;
 
-    // использование конструктора копирования
-    BinarySearchTree <int> second = tree;
+    // читаем дерево из файла
+    BinarySearchTree <int> second;
+    std::ifstream in("D:\\input.txt");
 
-    // выводим дерево в файл
-    std::ofstream out("D:\\output.txt");
-    out << second;
+    in >> second;
+    std::cout << second << std::endl;
+
+    if(tree==second)
+        std::cout<<"Trees are equal"<<std::endl;
+
+    else std::cout<<"Trees are not equal" <<std::endl;
+
 
     // использование контструктора перемещения
     BinarySearchTree <int> third (std::move(second));
