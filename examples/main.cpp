@@ -4,7 +4,7 @@
 //#include "../include/BinarySearchTree.h"
 #include "../source/BinarySearchTree.cpp"
 
-iint main() {
+int main() {
 
     // создаем дерево с помощью списка инициализации
     BinarySearchTree <int> tree ({1,2,3,4,5});
