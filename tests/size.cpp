@@ -1,4 +1,4 @@
-#include "../include/BinarySearchTree.cpp"
+#include "../include/BinarySearchTree.h"
 #include "catch.hpp"
 /*
 SCENARIO( "size of empty tree must be equal 0" ) {
