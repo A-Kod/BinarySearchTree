@@ -56,7 +56,8 @@ public:
     auto Print_file (std::ofstream & out,Node* nd,int level) const noexcept -> void; // распечатать дерево
     auto size() noexcept -> size_t;                                                  // определение размера
     auto insert(const T & value) noexcept -> bool;                                   // вставка нового звена
-    auto find(const T & value) const noexcept -> Node*;                                    // поиск элемента
+    auto find(const T & value) const noexcept -> T*;
+    //auto find(const T & value) const noexcept -> Node*;                            // поиск элемента
     auto operator = (const BinarySearchTree<T> & tree) -> BinarySearchTree<T> &;     // оператор присваивания
     auto operator = (BinarySearchTree<T> && tree) -> BinarySearchTree<T> &;          // оператор перемещения
 
@@ -267,7 +268,24 @@ auto BinarySearchTree<T>:: insert(const T & value) noexcept -> bool
 }
 
 // поиск элемента в дереве
-template <typename T>
+template<typename T>
+auto BinarySearchTree<T>::find(const T& value) const noexcept -> const T*
+{
+    Node * current (root_);
+
+    while (current)
+    {
+        if (value < current->value_)
+            node = current->left_;
+        else if (value > current->value_)
+            node = current->right_;
+        else
+            return &current->value_;
+    }
+
+    return nullptr;
+}
+/*template <typename T>
 auto BinarySearchTree<T>::find(const T & value) const noexcept -> Node* //bool
 {
     // создаем указатель, который будет двигаться по дереву
@@ -298,7 +316,7 @@ auto BinarySearchTree<T>::find(const T & value) const noexcept -> Node* //bool
         }
     }
 }
-
+*/
 // оператор присваивания
 template <typename T>
 auto BinarySearchTree<T>::operator = (const BinarySearchTree<T> & tree) -> BinarySearchTree<T> &
