@@ -1,4 +1,7 @@
-SCENARIO("if element is (or not) in tree, insert method must return false (or true)") 
+#include "../include/BinarySearchTree.h"
+#include "catch.hpp"
+
+SCENARIO("if obj is in tree, insert must return false") 
 {
     GIVEN("tree")
     {
@@ -7,28 +10,28 @@ SCENARIO("if element is (or not) in tree, insert method must return false (or tr
         {
             THEN("sizes must be equal")
             {
-                REQUIRE(!tree.insert(1));
-                REQUIRE(tree.insert(0));
+                REQUIRE(!tree.insert(1));           //false
+                REQUIRE(tree.insert(0));            //true
             }
         }
     }
 }
 
-SCENARIO("if element is (or not) in tree, size must increase by one (or not change)") 
+SCENARIO("if element is in tree, size must increase ") 
 {
     GIVEN("tree, its size")
     {
         BinarySearchTree<int> tree({1, 2, 3, 4});
         size_t size = tree.size();
-        WHEN("insert element that is not in the tree")
+        WHEN("insert neue obj")
         {
             tree.insert(5);
-            THEN("sizes must increase by one")
+            THEN("size must increase")
             {
                 REQUIRE(tree.size() == size + 1);
             }
         }
-        WHEN("insert element that is in the tree")
+        WHEN("insert obj that is already in the tree")
         {
             tree.insert(3);
             THEN("sizes must be equal")
