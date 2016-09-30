@@ -1,6 +1,6 @@
 #include "../include/BinarySearchTree.h"
 #include "catch.hpp"
-/*
+
 SCENARIO( "size of empty tree must be equal 0" ) {
 
     GIVEN( "empty tree" ) 
@@ -27,11 +27,9 @@ SCENARIO( "size of empty tree must be equal 0" ) {
         
     }
 }
-*/
-#include "../include/BinarySearchTree.h"
-#include "catch.hpp"
 
-SCENARIO("size of empty tree must be equal 0") {
+
+/*SCENARIO("size of empty tree must be equal 0") {
     GIVEN("empty tree") {
         BinarySearchTree<int> tree;
         WHEN("decide size") {
@@ -51,6 +49,7 @@ SCENARIO("size of non-empty tree must not be equal 0") {
         }
     }
 }
+*/
 SCENARIO("size of constant tree must be equal to size of non-constant tree") {
     GIVEN("constant and non-constant trees")
     {
