@@ -1,3 +1,8 @@
+#define CATCH_CONFIG_MAIN
+
+#include <BinarySearchTree.h>
+#include "catch.h"
+
 SCENARIO( "size of empty tree must be equal 0" ) {
 
     GIVEN( "empty tree" ) 
@@ -22,5 +27,20 @@ SCENARIO( "size of empty tree must be equal 0" ) {
             }
         }
         
+    }
+}
+
+SCENARIO("size of constant tree must be equal to size of non-constant tree") {
+    GIVEN("constant and non-constant trees")
+    {
+        const BinarySearchTree<int> tree1{1, 3, 5, 0};
+        BinarySearchTree<int> tree2{1, 3, 5, -1};
+        WHEN("compare sizes")
+        {
+            THEN("sizes must be equal")
+            {
+                REQUIRE(tree1.size() == tree2.size());
+            }
+        }
     }
 }
