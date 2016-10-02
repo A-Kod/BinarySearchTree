@@ -1,12 +1,6 @@
 #ifndef BST
 #define BST
 
-#include <iostream>
-#include <vector>
-#include <fstream>
-
-
-
 template <typename T>
 class BinarySearchTree;
 
@@ -52,16 +46,18 @@ public:
     BinarySearchTree(BinarySearchTree<T> && tree);                                   // конструктор перемещения
     ~BinarySearchTree();                                                             // деструктор
 
+    auto low_level(Node* nd, std::vector<T>& v) -> void;                             // найти все элемента ниже текущего
+    auto remove_el(const T value) -> bool;                                           // удаление элемента из дерева
     auto Insert_copy (Node *nd) noexcept -> void;                                    // для конструктора копирования
-    auto Clean (Node *nd) const noexcept -> void;                                    // для деструктора
+    auto Clean (Node*  nd) noexcept -> void;                                         // для деструктора
     auto Root() const noexcept -> Node*;                                             // корень дерева
     auto Print (std::ostream & out,Node* nd,int level) const noexcept -> void;       // распечатать дерево
     auto Print_file (std::ofstream & out,Node* nd,int level) const noexcept -> void; // распечатать дерево
     auto size() noexcept -> size_t;                                                  // определение размера
     auto size_const() const noexcept -> size_t;
     auto insert(const T & value) noexcept -> bool;                                   // вставка нового звена
-    auto find(const T & value) const noexcept -> const T*;
-    //auto find(const T & value) const noexcept -> Node*;                            // поиск элемента
+    auto find(const T& value) const noexcept -> T*;                                  // поиск элемента
+    auto find_node(const T& value) const noexcept -> Node*;                          // поиск элемента
     auto operator = (const BinarySearchTree<T> & tree) -> BinarySearchTree<T> &;     // оператор присваивания
     auto operator = (BinarySearchTree<T> && tree) -> BinarySearchTree<T> &;          // оператор перемещения
 
@@ -78,3 +74,4 @@ public:
 };
 
 #endif BST
+
