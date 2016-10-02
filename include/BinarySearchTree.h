@@ -379,16 +379,20 @@ auto BinarySearchTree<T>::is_equal(Node* nd,const BinarySearchTree<T> & tree) co
     if(tree.find(nd->value_))
     {
         if(nd->left_)
+        {
             if(!is_equal(nd->left_,tree))
-                return false;
+                {return false;}
             else
-                return true;
+                {return true;}
+        }
 
         if(nd->right_)
+        {
             if(!is_equal(nd->right_,tree))
-                return false;
+               { return false;}
             else
-                return true;
+               { return true;}
+         }
         return true;
     }
     else
