@@ -28,7 +28,7 @@ SCENARIO("if element is in tree, size must increase ")
             tree.insert(5);
             THEN("size must increase")
             {
-                REQUIRE(tree.size() == size + 1);
+                REQUIRE(tree.size() == (size + 1));
             }
         }
         WHEN("insert obj that is already in the tree")
