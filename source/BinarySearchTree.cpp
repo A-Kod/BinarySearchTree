@@ -290,7 +290,6 @@ auto BinarySearchTree<T>::find(const T & value) const noexcept -> Node* //bool
 {
     // создаем указатель, который будет двигаться по дереву
     Node* current (root_);
-
     while (1)
     {
         if(value < current->value_)
@@ -298,7 +297,6 @@ auto BinarySearchTree<T>::find(const T & value) const noexcept -> Node* //bool
             // если двигаться влево уже не получится - элемент отсутствует в дереве
             if (current->left_== nullptr)
                 return nullptr;//false;
-
             // иначе - двигаемся дальше по дереву, в левый узел
             current = current->left_;
         }
@@ -307,7 +305,6 @@ auto BinarySearchTree<T>::find(const T & value) const noexcept -> Node* //bool
                 // если двигаться вправо уже не получится - элемент отсутствует в дереве
                 if (current->right_ == nullptr)
                     return nullptr;//false;
-
                 // иначе - двигаемся дальше по дереву, в правый узел
                 current = current->right_;
             }
@@ -379,16 +376,20 @@ auto BinarySearchTree<T>::is_equal(Node* nd,const BinarySearchTree<T> & tree) co
     if(tree.find(nd->value_))
     {
         if(nd->left_)
+        {
             if(!is_equal(nd->left_,tree))
-                return false;
+                {return false;}
             else
-                return true;
+                {return true;}
+        }
 
         if(nd->right_)
+        {
             if(!is_equal(nd->right_,tree))
-                return false;
+               { return false;}
             else
-                return true;
+               { return true;}
+         }
         return true;
     }
     else
