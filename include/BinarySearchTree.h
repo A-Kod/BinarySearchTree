@@ -58,6 +58,7 @@ public:
     auto Print (std::ostream & out,Node* nd,int level) const noexcept -> void;       // распечатать дерево
     auto Print_file (std::ofstream & out,Node* nd,int level) const noexcept -> void; // распечатать дерево
     auto size() noexcept -> size_t;                                                  // определение размера
+    auto size() const noexcept -> size_t;
     auto insert(const T & value) noexcept -> bool;                                   // вставка нового звена
     auto find(const T & value) const noexcept -> const T*;
     //auto find(const T & value) const noexcept -> Node*;                            // поиск элемента
