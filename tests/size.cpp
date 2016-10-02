@@ -50,6 +50,8 @@ SCENARIO("size of non-empty tree must not be equal 0") {
     }
 }
 */
+
+/*
 SCENARIO("size of constant tree must be equal to size of non-constant tree") {
     GIVEN("constant and non-constant trees")
     {
@@ -64,3 +66,5 @@ SCENARIO("size of constant tree must be equal to size of non-constant tree") {
         }
     }
 }
+
+*/
