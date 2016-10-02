@@ -1,6 +1,10 @@
 #ifndef BST
 #define BST
 
+#include <iostream>
+#include <vector>
+#include <fstream>
+
 template <typename T>
 class BinarySearchTree;
 
