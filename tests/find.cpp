@@ -1,4 +1,5 @@
 #include "../include/BinarySearchTree.h"
+#include "../source/BinarySearchTree.cpp"
 #include "catch.hpp"
 
 SCENARIO("if obj is in tree") 
