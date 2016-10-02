@@ -148,7 +148,7 @@ auto BinarySearchTree<T>::size() noexcept -> size_t
 
 
 template <typename T>
-auto BinarySearchTree<T>::size() const noexcept -> size_t
+auto BinarySearchTree<T>::size_const() const noexcept -> size_t
 {
     return size_;
 }
