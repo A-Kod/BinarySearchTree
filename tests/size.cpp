@@ -28,3 +28,16 @@ SCENARIO( "size of empty tree must be equal 0" ) {
     }
 }
 
+SCENARIO("size of constant tree must be equal to size of non-constant tree") {
+    GIVEN("constant and non-constant trees")
+    {
+        const BinarySearchTree<int> tree1({1, 2, 3, 4});
+        WHEN("compare sizes")
+        {
+            THEN("sizes must be calculated»)
+            {
+                REQUIRE(tree1.size()!=0);
+            }
+        }
+    }
+}
