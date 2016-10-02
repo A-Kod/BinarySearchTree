@@ -5,6 +5,7 @@
 #include <fstream>
 
 
+
 // конструктор по умолчанию
 template <typename T>
 BinarySearchTree<T>::BinarySearchTree()
@@ -41,15 +42,99 @@ BinarySearchTree<T>::BinarySearchTree(const BinarySearchTree<T> & tree)
 template <typename T>
 BinarySearchTree<T>::BinarySearchTree(BinarySearchTree<T> && tree) : size_(tree.size_), root_(tree.root_)
 {
-    tree.root_ = nullptr;
-    tree.size_ = 0;
+   tree.root_ = nullptr;
+   tree.size_ = 0;
 }
 
 // деструктор
 template <typename T>
 BinarySearchTree<T>::~BinarySearchTree()
 {
-    Clean(root_);
+   Clean(root_);
+}
+
+
+// найти все элементы ниже текущего
+template <typename T>
+auto BinarySearchTree<T>::low_level(Node* nd, std::vector<T>& v) -> void
+{
+    // если дерево пустое, то выходим
+    if (nd == nullptr)
+        return ;
+    else
+    {
+        // помещаем элемент в контейнер
+        v.push_back(nd->value_);
+
+        // левое поддерево
+        low_level(nd->left_,v);
+
+        // правое поддерево
+        low_level(nd->right_,v);
+    }
+}
+
+// удаление элемента из дерева
+template <typename T>
+auto BinarySearchTree<T>::remove_el(const T value) -> bool
+{
+    // ищем искомый элемент в дереве
+    Node* n = find_node(value);
+
+    // если не нашли - выходим
+    if(n == nullptr)
+        return 0;
+
+    // создаем пустой вектор
+    size_--;
+    std::vector <T> vc = {};
+
+    // заполняем вектор элементами, которые идут ниже текущего
+    low_level(n->left_,vc);
+    low_level(n->right_,vc);
+
+    // находим родителя узла, который будет удален
+    Node* parent = root_;
+
+    // если удаляемый элемент в корне - удаляем дерево
+    if(root_ == n)
+    {
+       delete root_;
+       size_ = 0;
+       root_ = nullptr;
+    }
+    else
+    {
+       while(1)
+       {
+           if(parent->right_==n || parent->left_==n)
+            break;
+
+           if(value<parent->value_)
+            parent = parent->left_;
+           else
+            parent = parent->right_;
+       }
+
+       // обнуляем сответствующие ветки дерева
+       if(value < parent->value_)
+         parent->left_ = nullptr;
+       else
+         parent->right_ = nullptr;
+
+       // освобождаем память
+       Clean(n);
+    }
+
+    size_ -= vc.size();
+
+    // добавляем элементы в дерево
+    for (auto v: vc)
+    {
+       insert(v);
+    }
+
+    return true;
 }
 
 template <typename T>
@@ -73,23 +158,19 @@ auto BinarySearchTree<T>::Insert_copy (Node *nd) noexcept -> void
 }
 
 template <typename T>
-auto BinarySearchTree<T>::Clean (Node *nd) const noexcept -> void
+auto BinarySearchTree<T>::Clean (Node* nd) noexcept -> void
 {
-    if(nd == nullptr)
-        return ;
-
-    if(nd->left_)
+    if(nd != nullptr)
     {
         Clean(nd->left_);
-        nd->left_ = nullptr;
+        //nd->left_ = nullptr;
+
+        Clean(nd->right_);
+        //nd->right_ = nullptr;
+
+        delete nd;
     }
 
-    if(nd->right_)
-    {
-        Clean(nd->right_);
-        nd->right_ = nullptr;
-    }
-    delete nd;
 }
 
 // корень дерева
@@ -146,69 +227,86 @@ auto BinarySearchTree<T>::size() noexcept -> size_t
     return size_;
 }
 
-
 template <typename T>
 auto BinarySearchTree<T>::size_const() const noexcept -> size_t
 {
     return size_;
 }
-
 // вставка элемента в дерево
 template <typename T>
 auto BinarySearchTree<T>:: insert(const T & value) noexcept -> bool
 {
+   // если дерево пустое - создаем корень
+   if (root_== nullptr)
+   {
+       root_ = new Node (value);
+       size_ = 1;
+       return true;
+   }
 
-    // если дерево пустое - создаем корень
-    if (root_== nullptr)
-    {
-        root_ = new Node (value);
-        size_ = 1;
-        return true;
-    }
+   // создаем указатель, который будет двигаться по дереву
+   Node* current (root_);
 
-    // создаем указатель, который будет двигаться по дереву
-    Node* current (root_);
+   while (1)
+   {
+       if(value==current->value_)
+       {
+           return false;
+       }
 
-    while (1)
-    {
-        if(value==current->value_)
-        {
-            return false;
-        }
+       if(value>current->value_)
+       {
+           // если дошли до необходимого места вставки - создаем новый узел дерева
+           if (current->right_== nullptr)
+          {
+              Node* new_node = new Node (value);
+              current->right_ = new_node;
+              size_++;
+              return true;
+          }
 
-        if(value>current->value_)
-        {
-            // если дошли до необходимого места вставки - создаем новый узел дерева
-            if (current->right_== nullptr)
-            {
-                Node* new_node = new Node (value);
-                current->right_ = new_node;
-                size_++;
-                return true;
-            }
+           // иначе - двигаемся дальше по дереву, в правый узел
+           current = current->right_;
+       }
+       else
+       {
+           // если дошли до необходимого места вставки - создаем новый узел дерева
+           if (current->left_== nullptr)
+           {
+               Node* new_node = new Node (value);
+               current->left_ = new_node;
+               size_++;
+               return true;
+           }
 
-            // иначе - двигаемся дальше по дереву, в правый узел
-            current = current->right_;
-        }
-        else
-        {
-            // если дошли до необходимого места вставки - создаем новый узел дерева
-            if (current->left_== nullptr)
-            {
-                Node* new_node = new Node (value);
-                current->left_ = new_node;
-                size_++;
-                return true;
-            }
-
-            // иначе - двигаемся дальше по дереву, в левый узел
-            current = current->left_;       }
-    }
+           // иначе - двигаемся дальше по дереву, в левый узел
+           current = current->left_;       }
+   }
 }
 
 // поиск элемента в дереве
 template<typename T>
-auto BinarySearchTree<T>::find(const T& value) const noexcept -> const T*
+auto BinarySearchTree<T>::find(const T& value) const noexcept -> T*
+{
+   Node * current (root_);
+
+   while (current)
+   {
+       if (value < current->value_)
+              current = current->left_;
+       else
+         if (value > current->value_)
+           current = current->right_;
+         else
+            return &current->value_;
+   }
+
+   return nullptr;
+}
+
+// поиск узла в дереве
+template<typename T>
+auto BinarySearchTree<T>::find_node(const T& value) const noexcept -> Node*
 {
     Node * current (root_);
 
@@ -216,43 +314,16 @@ auto BinarySearchTree<T>::find(const T& value) const noexcept -> const T*
     {
         if (value < current->value_)
             current = current->left_;
-        else if (value > current->value_)
+        else
+        if (value > current->value_)
             current = current->right_;
         else
-            return &current->value_;
+            return current;
     }
 
     return nullptr;
 }
-/*template <typename T>
-auto BinarySearchTree<T>::find(const T & value) const noexcept -> Node* //bool
-{
-    // создаем указатель, который будет двигаться по дереву
-    Node* current (root_);
-    while (1)
-    {
-        if(value < current->value_)
-        {
-            // если двигаться влево уже не получится - элемент отсутствует в дереве
-            if (current->left_== nullptr)
-                return nullptr;//false;
-            // иначе - двигаемся дальше по дереву, в левый узел
-            current = current->left_;
-        }
-        else {
-            if (value > current->value_) {
-                // если двигаться вправо уже не получится - элемент отсутствует в дереве
-                if (current->right_ == nullptr)
-                    return nullptr;//false;
-                // иначе - двигаемся дальше по дереву, в правый узел
-                current = current->right_;
-            }
-            else
-                return current; //true;
-        }
-    }
-}
-*/
+
 // оператор присваивания
 template <typename T>
 auto BinarySearchTree<T>::operator = (const BinarySearchTree<T> & tree) -> BinarySearchTree<T> &
@@ -275,13 +346,13 @@ auto BinarySearchTree<T>::insert_rec(Node*& nd, const T& value) noexcept -> void
         return ;
     }
 
-        // если узел уже существует - ищем место для вставки
+    // если узел уже существует - ищем место для вставки
     else
     {
         if(value < nd->value_)
         {
             if(nd->left_)
-                insert_rec(nd->left_, value);
+              insert_rec(nd->left_, value);
             else
             {
                 nd->left_ = new Node (value);
@@ -291,19 +362,19 @@ auto BinarySearchTree<T>::insert_rec(Node*& nd, const T& value) noexcept -> void
         }
 
         else
-        if(value == nd->value_)
-            return ;
-        else
-        {
-            if(nd->right_)
-                insert_rec(nd->right_, value);
-            else
-            {
-                nd->right_ = new Node (value);
-                size_++;
-                return ;
-            }
-        }
+         if(value == nd->value_)
+             return ;
+         else
+         {
+             if(nd->right_)
+                 insert_rec(nd->right_, value);
+             else
+             {
+                 nd->right_ = new Node (value);
+                 size_++;
+                 return ;
+             }
+         }
     }
 }
 
@@ -315,20 +386,16 @@ auto BinarySearchTree<T>::is_equal(Node* nd,const BinarySearchTree<T> & tree) co
     if(tree.find(nd->value_))
     {
         if(nd->left_)
-        {
             if(!is_equal(nd->left_,tree))
-                {return false;}
+              return false;
             else
-                {return true;}
-        }
+                return true;
 
         if(nd->right_)
-        {
             if(!is_equal(nd->right_,tree))
-               { return false;}
+                return false;
             else
-               { return true;}
-         }
+                return true;
         return true;
     }
     else
@@ -341,12 +408,12 @@ auto BinarySearchTree<T>::is_equal(Node* nd,const BinarySearchTree<T> & tree) co
 template <typename T>
 auto BinarySearchTree<T>::operator = (BinarySearchTree<T> && tree) -> BinarySearchTree<T> &
 {
-    this->root_ = tree.root_;
-    this->size_ = tree.size_;
+   this->root_ = tree.root_;
+   this->size_ = tree.size_;
 
-    // освобождаем память временного объекта
-    tree.root_ = nullptr;
-    tree.size_ = 0;
+   // освобождаем память временного объекта
+   tree.root_ = nullptr;
+   tree.size_ = 0;
 }
 
 
@@ -370,10 +437,10 @@ auto operator << (std::ostream& out, const BinarySearchTree<T>& tree) ->std::ost
 template <typename T>
 auto operator >> (std::istream& in, BinarySearchTree<T>& tree) ->std::istream&
 {
-    T a;
-    in >> a;
-    tree.insert_rec(tree.root_,a);
-    return in;
+   T a;
+   in >> a;
+   tree.insert_rec(tree.root_,a);
+   return in;
 }
 
 template <typename T>
@@ -392,14 +459,14 @@ auto operator >> (std::ifstream& in, BinarySearchTree<T>& tree) ->std::ifstream&
 template <typename T>
 auto BinarySearchTree<T>::operator == (const BinarySearchTree& tree) -> bool
 {
-    if(tree.size_==this->size_)
-    {
-        if(is_equal(this->root_,tree))
-            return true;
-        else
-            return false;
-
-    }
-    else
+   if(tree.size_==this->size_)
+   {
+       if(is_equal(this->root_,tree))
+        return true;
+       else
         return false;
+
+   }
+    else
+       return false;
 }
