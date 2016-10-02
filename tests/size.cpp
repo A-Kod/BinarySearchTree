@@ -36,7 +36,7 @@ SCENARIO("size of constant tree must be equal to size of non-constant tree") {
         {
             THEN("sizes must be calculated")
             {
-                REQUIRE(tree1.size()!=0);
+                REQUIRE(tree1.size_const()!=0);
             }
         }
     }
