@@ -41,7 +41,7 @@ SCENARIO("find method must work for constant tree and non-constant tree")
         {
             THEN("return element for constant and non-constant tree") 
             {
-                REQUIRE(tree1.find(1) && tree2.find(4));
+                REQUIRE((tree1.find(1)) && (tree2.find(4)));
             }
         }
     }
