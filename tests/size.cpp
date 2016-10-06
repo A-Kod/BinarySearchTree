@@ -29,13 +29,13 @@ SCENARIO( "size of empty tree must be equal 0" ) {
     }
 }
 
-SCENARIO("size of constant tree must be equal to size of non-constant tree") {
-    GIVEN("constant and non-constant trees")
+SCENARIO("size of constant tree must be calculated") {
+    GIVEN("constant tree")
     {
         const BinarySearchTree<int> tree1({1, 2, 3, 4});
         WHEN("compare sizes")
         {
-            THEN("sizes must be calculated")
+            THEN("size must be calculated")
             {
                 REQUIRE(tree1.size_const()!=0);
             }
