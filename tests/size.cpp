@@ -33,7 +33,7 @@ SCENARIO("size of constant tree must be calculated") {
     GIVEN("constant tree")
     {
         const BinarySearchTree<int> tree1({1, 2, 3, 4});
-        WHEN("compare sizes")
+        WHEN("calculate size")
         {
             THEN("size must be calculated")
             {
