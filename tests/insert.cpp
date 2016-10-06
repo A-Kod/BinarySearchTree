@@ -16,10 +16,6 @@ SCENARIO("if obj is in tree, insert must return false")
             }
         }
     }
-}
-
-SCENARIO("if element is in tree, size must increase ") 
-{
     GIVEN("tree, its size")
     {
         BinarySearchTree<int> tree({1, 2, 3, 4});
@@ -40,5 +36,5 @@ SCENARIO("if element is in tree, size must increase ")
                 REQUIRE(tree.size() == size);
             }
         }
-    }
+    }    
 }
