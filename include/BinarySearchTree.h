@@ -26,13 +26,13 @@ class BinarySearchTree {
 
 private:
     struct Node;
-    Node * root_;
+    std::shared_ptr<Node> root_;
     size_t size_;
 
     struct Node {
         T value_;
-        Node * left_;
-        Node * right_;
+        std::shared_ptr<Node> left_;
+        std::shared_ptr<Node> right_;
 
         Node(T value) : value_(value), left_(nullptr), right_(nullptr) {}
 
@@ -51,23 +51,22 @@ public:
     BinarySearchTree(BinarySearchTree<T> && tree);                                   // конструктор перемещения
     ~BinarySearchTree();                                                             // деструктор
 
-    auto low_level(Node* nd, std::vector<T>& v) -> void;                             // найти все элемента ниже текущего
+    auto low_level(std::shared_ptr<Node> nd, std::vector<T>& v) -> void;                             // найти все элемента ниже текущего
     auto remove_el(const T value) -> bool;                                           // удаление элемента из дерева
-    auto Insert_copy (Node *nd) noexcept -> void;                                    // для конструктора копирования
-    auto Clean (Node*  nd) noexcept -> void;                                         // для деструктора
-    auto Root() const noexcept -> Node*;                                             // корень дерева
-    auto Print (std::ostream & out,Node* nd,int level) const noexcept -> void;       // распечатать дерево
-    auto Print_file (std::ofstream & out,Node* nd,int level) const noexcept -> void; // распечатать дерево
+    auto Insert_copy (std::shared_ptr<Node> nd) noexcept -> void;                                    // для конструктора копирования
+    auto Clean (std::shared_ptr<Node>  nd) noexcept -> void;                                         // для деструктора
+    auto Root() const noexcept -> std::shared_ptr<Node>;                                             // корень дерева
+    auto Print (std::ostream & out,std::shared_ptr<Node> nd,int level) const noexcept -> void;       // распечатать дерево
+    auto Print_file (std::ofstream & out,std::shared_ptr<Node> nd,int level) const noexcept -> void; // распечатать дерево
     auto size() noexcept -> size_t;                                                  // определение размера
-    auto size_const() const noexcept -> size_t;
     auto insert(const T & value) noexcept -> bool;                                   // вставка нового звена
     auto find(const T& value) const noexcept -> T*;                                  // поиск элемента
-    auto find_node(const T& value) const noexcept -> Node*;                          // поиск элемента
+    auto find_node(const T& value) const noexcept -> std::shared_ptr<Node>;                          // поиск элемента
     auto operator = (const BinarySearchTree<T> & tree) -> BinarySearchTree<T> &;     // оператор присваивания
     auto operator = (BinarySearchTree<T> && tree) -> BinarySearchTree<T> &;          // оператор перемещения
 
-    auto insert_rec(Node*& nd, const T& value) noexcept->void;
-    auto is_equal(Node* nd,const BinarySearchTree<T> & tree) const noexcept->bool;
+    auto insert_rec(std::shared_ptr<Node> nd, const T& value) noexcept->void;
+    auto is_equal(std::shared_ptr<Node> nd,const BinarySearchTree<T> & tree) const noexcept->bool;
 
 
     friend auto operator >> <> (std::istream& in, BinarySearchTree<T>& tree)->std::istream&;
