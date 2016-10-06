@@ -138,6 +138,53 @@ auto BinarySearchTree<T>::remove_el(const T value) -> bool
     return true;
 }
 
+template<typename T>
+auto BinarySearchTree<T>::remove(const T& value) noexcept -> bool
+{
+    if (remove_(value, root_))
+    {
+        size_--;
+        return true;
+    }
+
+    return false;
+}
+
+template<typename T>
+auto BinarySearchTree<T>::remove_(const T& value, std::shared_ptr<Node>& nd) noexcept -> bool
+{
+    if (!nd)
+        return false;
+
+    if (value < nd->value_)
+        remove_(value, nd->left_);
+    if (value > nd->value_)
+        remove_(value, nd->right_);
+    else
+    {
+        if (!nd->left_)
+            nd = nd->right_;
+        else if (!nd->right_)
+            nd = nd->left_;
+        else
+        {
+            auto min = nd->right_;
+            auto parent = nd;
+
+            while (min->left_)
+            {
+                parent = min;
+                min = min->left_;
+            }
+
+            nd->value_ = min->value_;
+            parent->left_ = nullptr;
+        }
+    }
+
+    return true;
+}
+
 template <typename T>
 auto BinarySearchTree<T>::Insert_copy (std::shared_ptr<Node> nd) noexcept -> void
 {
