@@ -32,7 +32,7 @@ BinarySearchTree<T>::BinarySearchTree(const std::initializer_list<T> & list)
 template <typename T>
 BinarySearchTree<T>::BinarySearchTree(const BinarySearchTree<T> & tree)
 {
-    delete root_;
+    root_.reset();
     root_ = nullptr;
     size_ = 0;
 
@@ -43,21 +43,21 @@ BinarySearchTree<T>::BinarySearchTree(const BinarySearchTree<T> & tree)
 template <typename T>
 BinarySearchTree<T>::BinarySearchTree(BinarySearchTree<T> && tree) : size_(tree.size_), root_(tree.root_)
 {
-   tree.root_ = nullptr;
-   tree.size_ = 0;
+    tree.root_ = nullptr;
+    tree.size_ = 0;
 }
 
 // деструктор
 template <typename T>
 BinarySearchTree<T>::~BinarySearchTree()
 {
-   Clean(root_);
+    Clean(root_);
 }
 
 
 // найти все элементы ниже текущего
 template <typename T>
-auto BinarySearchTree<T>::low_level(Node* nd, std::vector<T>& v) -> void
+auto BinarySearchTree<T>::low_level(std::shared_ptr<Node> nd, std::vector<T>& v) -> void
 {
     // если дерево пустое, то выходим
     if (nd == nullptr)
@@ -80,7 +80,7 @@ template <typename T>
 auto BinarySearchTree<T>::remove_el(const T value) -> bool
 {
     // ищем искомый элемент в дереве
-    Node* n = find_node(value);
+    std::shared_ptr<Node> n = find_node(value);
 
     // если не нашли - выходим
     if(n == nullptr)
@@ -95,36 +95,36 @@ auto BinarySearchTree<T>::remove_el(const T value) -> bool
     low_level(n->right_,vc);
 
     // находим родителя узла, который будет удален
-    Node* parent = root_;
+    std::shared_ptr<Node> parent = root_;
 
     // если удаляемый элемент в корне - удаляем дерево
     if(root_ == n)
     {
-       delete root_;
-       size_ = 0;
-       root_ = nullptr;
+        root_.reset();
+        size_ = 0;
+        root_ = nullptr;
     }
     else
     {
-       while(1)
-       {
-           if(parent->right_==n || parent->left_==n)
-            break;
+        while(1)
+        {
+            if(parent->right_==n || parent->left_==n)
+                break;
 
-           if(value<parent->value_)
-            parent = parent->left_;
-           else
-            parent = parent->right_;
-       }
+            if(value<parent->value_)
+                parent = parent->left_;
+            else
+                parent = parent->right_;
+        }
 
-       // обнуляем сответствующие ветки дерева
-       if(value < parent->value_)
-         parent->left_ = nullptr;
-       else
-         parent->right_ = nullptr;
+        // обнуляем сответствующие ветки дерева
+        if(value < parent->value_)
+            parent->left_ = nullptr;
+        else
+            parent->right_ = nullptr;
 
-       // освобождаем память
-       Clean(n);
+        // освобождаем память
+        Clean(n);
     }
 
     size_ -= vc.size();
@@ -132,14 +132,14 @@ auto BinarySearchTree<T>::remove_el(const T value) -> bool
     // добавляем элементы в дерево
     for (auto v: vc)
     {
-       insert(v);
+        insert(v);
     }
 
     return true;
 }
 
 template <typename T>
-auto BinarySearchTree<T>::Insert_copy (Node *nd) noexcept -> void
+auto BinarySearchTree<T>::Insert_copy (std::shared_ptr<Node> nd) noexcept -> void
 {
     if(nd == nullptr)
         return ;
@@ -155,34 +155,31 @@ auto BinarySearchTree<T>::Insert_copy (Node *nd) noexcept -> void
     {
         Insert_copy(nd->right_);
     }
-
 }
 
 template <typename T>
-auto BinarySearchTree<T>::Clean (Node* nd) noexcept -> void
+auto BinarySearchTree<T>::Clean (std::shared_ptr<Node> nd) noexcept -> void
 {
     if(nd != nullptr)
     {
         Clean(nd->left_);
-        //nd->left_ = nullptr;
-
         Clean(nd->right_);
-        //nd->right_ = nullptr;
 
-        delete nd;
+        nd.reset();
     }
 
 }
 
 // корень дерева
 template <typename T>
-auto BinarySearchTree<T>::Root() const noexcept -> Node*
+auto BinarySearchTree<T>::Root() const noexcept -> std::shared_ptr<Node>
 {
     return root_;
 }
 
+
 template <typename T>
-auto BinarySearchTree<T>::Print (std::ostream & out,Node* nd,int level) const noexcept -> void
+auto BinarySearchTree<T>::Print (std::ostream & out,std::shared_ptr<Node> nd,int level) const noexcept -> void
 {
     // если дерево пустое, то выходим
     if (nd== nullptr)
@@ -200,11 +197,10 @@ auto BinarySearchTree<T>::Print (std::ostream & out,Node* nd,int level) const no
         Print(out,nd->left_,++level);
 
     }
-
 }
 
 template <typename T>
-auto BinarySearchTree<T>::Print_file(std::ofstream & out,Node* nd,int level) const noexcept -> void
+auto BinarySearchTree<T>::Print_file(std::ofstream & out,std::shared_ptr<Node> nd,int level) const noexcept -> void
 {
     // если дерево пустое, то выходим
     if (nd== nullptr)
@@ -228,88 +224,85 @@ auto BinarySearchTree<T>::size() noexcept -> size_t
     return size_;
 }
 
-template <typename T>
-auto BinarySearchTree<T>::size_const() const noexcept -> size_t
-{
-    return size_;
-}
 // вставка элемента в дерево
 template <typename T>
 auto BinarySearchTree<T>:: insert(const T & value) noexcept -> bool
 {
-   // если дерево пустое - создаем корень
-   if (root_== nullptr)
-   {
-       root_ = new Node (value);
-       size_ = 1;
-       return true;
-   }
+    // если дерево пустое - создаем корень
+    if (root_== nullptr)
+    {
+        std::shared_ptr<Node> t(new Node (value));
+        root_ = t;
+        size_ = 1;
+        return true;
+    }
 
-   // создаем указатель, который будет двигаться по дереву
-   Node* current (root_);
+    // создаем указатель, который будет двигаться по дереву
+    std::shared_ptr<Node> current =  root_;
 
-   while (1)
-   {
-       if(value==current->value_)
-       {
-           return false;
-       }
+    while (1)
+    {
+        if(value==current->value_)
+        {
+            return false;
+        }
 
-       if(value>current->value_)
-       {
-           // если дошли до необходимого места вставки - создаем новый узел дерева
-           if (current->right_== nullptr)
-          {
-              Node* new_node = new Node (value);
-              current->right_ = new_node;
-              size_++;
-              return true;
-          }
+        if(value>current->value_)
+        {
+            // если дошли до необходимого места вставки - создаем новый узел дерева
+            if (current->right_== nullptr)
+            {
+                std::shared_ptr<Node> new_node (new Node(value));
+                current->right_ = new_node;
+                size_++;
+                return true;
+            }
 
-           // иначе - двигаемся дальше по дереву, в правый узел
-           current = current->right_;
-       }
-       else
-       {
-           // если дошли до необходимого места вставки - создаем новый узел дерева
-           if (current->left_== nullptr)
-           {
-               Node* new_node = new Node (value);
-               current->left_ = new_node;
-               size_++;
-               return true;
-           }
+            // иначе - двигаемся дальше по дереву, в правый узел
+            current = current->right_;
+        }
+        else
+        {
+            // если дошли до необходимого места вставки - создаем новый узел дерева
+            if (current->left_== nullptr)
+            {
+                std::shared_ptr<Node> new_node (new Node(value));
+                current->left_ = new_node;
+                size_++;
+                return true;
+            }
 
-           // иначе - двигаемся дальше по дереву, в левый узел
-           current = current->left_;       }
-   }
+            // иначе - двигаемся дальше по дереву, в левый узел
+            current = current->left_;
+        }
+    }
 }
 
 // поиск элемента в дереве
 template<typename T>
 auto BinarySearchTree<T>::find(const T& value) const noexcept -> T*
 {
-   Node * current (root_);
+    std::shared_ptr<Node> current  = root_;
 
-   while (current)
-   {
-       if (value < current->value_)
-              current = current->left_;
-       else
-         if (value > current->value_)
-           current = current->right_;
-         else
+    while (current)
+    {
+        if (value < current->value_)
+            current = current->left_;
+        else
+        if (value > current->value_)
+            current = current->right_;
+        else
             return &current->value_;
-   }
+    }
 
-   return nullptr;
+    return nullptr;
 }
 
 // поиск узла в дереве
 template<typename T>
-auto BinarySearchTree<T>::find_node(const T& value) const noexcept -> Node*
+auto BinarySearchTree<T>::find_node(const T& value) const noexcept -> std::shared_ptr<Node>
 {
-    Node * current (root_);
+    std::shared_ptr<Node> current  = root_;
 
     while (current)
     {
@@ -329,31 +322,30 @@ auto BinarySearchTree<T>::find_node(const T& value) const noexcept -> Node*
 template <typename T>
 auto BinarySearchTree<T>::operator = (const BinarySearchTree<T> & tree) -> BinarySearchTree<T> &
 {
-    delete this->root_;
-
-    this->root_ = new Node(tree.root_);
-    this->root_ = tree.root_;
-    this->size_ = tree.size_;
+    root_.reset();
+    root_ = tree.root_;
+    size_ = tree.size_;
 }
 
 template <typename T>
-auto BinarySearchTree<T>::insert_rec(Node*& nd, const T& value) noexcept -> void
+auto BinarySearchTree<T>::insert_rec(std::shared_ptr<Node> nd, const T& value) noexcept -> void
 {
     // добавление узла в дерево
     if (nd == nullptr)
     {
-        nd = new Node (value);
+        std::shared_ptr<Node> new_node (new Node(value));
+        nd = new_node;
         size_++;
         return ;
     }
 
-    // если узел уже существует - ищем место для вставки
+        // если узел уже существует - ищем место для вставки
     else
     {
         if(value < nd->value_)
         {
             if(nd->left_)
-              insert_rec(nd->left_, value);
+                insert_rec(nd->left_, value);
             else
             {
                 nd->left_ = new Node (value);
@@ -363,32 +355,32 @@ auto BinarySearchTree<T>::insert_rec(Node*& nd, const T& value) noexcept -> void
         }
 
         else
-         if(value == nd->value_)
-             return ;
-         else
-         {
-             if(nd->right_)
-                 insert_rec(nd->right_, value);
-             else
-             {
-                 nd->right_ = new Node (value);
-                 size_++;
-                 return ;
-             }
-         }
+        if(value == nd->value_)
+            return ;
+        else
+        {
+            if(nd->right_)
+                insert_rec(nd->right_, value);
+            else
+            {
+                nd->right_ = new Node (value);
+                size_++;
+                return ;
+            }
+        }
     }
 }
 
 
 template <typename T>
-auto BinarySearchTree<T>::is_equal(Node* nd,const BinarySearchTree<T> & tree) const noexcept->bool
+auto BinarySearchTree<T>::is_equal(std::shared_ptr<Node> nd,const BinarySearchTree<T> & tree) const noexcept->bool
 {
 
     if(tree.find(nd->value_))
     {
         if(nd->left_)
             if(!is_equal(nd->left_,tree))
-              return false;
+                return false;
             else
                 return true;
 
@@ -409,12 +401,10 @@ auto BinarySearchTree<T>::is_equal(Node* nd,const BinarySearchTree<T> & tree) co
 template <typename T>
 auto BinarySearchTree<T>::operator = (BinarySearchTree<T> && tree) -> BinarySearchTree<T> &
 {
-   this->root_ = tree.root_;
-   this->size_ = tree.size_;
+    root_ = std::move(tree.root_);
+    size_ = tree.size_;
 
-   // освобождаем память временного объекта
-   tree.root_ = nullptr;
-   tree.size_ = 0;
+    tree.size_ = 0;
 }
 
 
@@ -434,14 +424,15 @@ auto operator << (std::ostream& out, const BinarySearchTree<T>& tree) ->std::ost
     return out;
 }
 
+
 // ввод с консоли
 template <typename T>
 auto operator >> (std::istream& in, BinarySearchTree<T>& tree) ->std::istream&
 {
-   T a;
-   in >> a;
-   tree.insert_rec(tree.root_,a);
-   return in;
+    T a;
+    in >> a;
+    tree.insert_rec(tree.root_,a);
+    return in;
 }
 
 template <typename T>
@@ -460,14 +451,14 @@ auto operator >> (std::ifstream& in, BinarySearchTree<T>& tree) ->std::ifstream&
 template <typename T>
 auto BinarySearchTree<T>::operator == (const BinarySearchTree& tree) -> bool
 {
-   if(tree.size_==this->size_)
-   {
-       if(is_equal(this->root_,tree))
-        return true;
-       else
-        return false;
+    if(tree.size_==this->size_)
+    {
+        if(is_equal(this->root_,tree))
+            return true;
+        else
+            return false;
 
-   }
+    }
     else
-       return false;
+        return false;
 }
