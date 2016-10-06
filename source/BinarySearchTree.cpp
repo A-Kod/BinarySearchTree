@@ -224,6 +224,12 @@ auto BinarySearchTree<T>::size() noexcept -> size_t
     return size_;
 }
 
+template <typename T>		
+auto BinarySearchTree<T>::size_const() const noexcept -> size_t		
+{		
+    return size_;		
+}
+
 // вставка элемента в дерево
 template <typename T>
 auto BinarySearchTree<T>:: insert(const T & value) noexcept -> bool
