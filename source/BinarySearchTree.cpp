@@ -138,10 +138,11 @@ auto BinarySearchTree<T>::remove_el(const T value) -> bool
     return true;
 }
 
+
 template<typename T>
 auto BinarySearchTree<T>::remove(const T& value) noexcept -> bool
 {
-    if (remove_(value, root_))
+    if (remove_helper(value, root_))
     {
         size_--;
         return true;
@@ -151,34 +152,45 @@ auto BinarySearchTree<T>::remove(const T& value) noexcept -> bool
 }
 
 template<typename T>
-auto BinarySearchTree<T>::remove_(const T& value, std::shared_ptr<Node>& nd) noexcept -> bool
+auto BinarySearchTree<T>::remove_helper(const T& value, std::shared_ptr<Node>& nd) noexcept -> bool
 {
     if (!nd)
         return false;
 
     if (value < nd->value_)
-        remove_(value, nd->left_);
+        remove_helper(value, nd->left_);
     if (value > nd->value_)
-        remove_(value, nd->right_);
+        remove_helper(value, nd->right_);
+        //if (value == nd->value_)
     else
     {
         if (!nd->left_)
             nd = nd->right_;
-        else if (!nd->right_)
+
+        if (!nd->right_)
             nd = nd->left_;
+
         else
         {
-            auto min = nd->right_;
-            auto parent = nd;
-
-            while (min->left_)
+            if (!nd->left_ && !nd->right_)
             {
-                parent = min;
-                min = min->left_;
+                nd = nullptr;
+                return true;
             }
-
-            nd->value_ = min->value_;
-            parent->left_ = nullptr;
+            if (nd->left_ && !nd->right_)
+            {
+                nd = nd->left_;
+                return true;
+            }
+            if (!nd->left_ && nd->right_)
+            {
+                nd = nd->right_;
+                return true;
+            }
+            else
+            {
+                remove_el(value);
+            }
         }
     }
 
@@ -271,11 +283,13 @@ auto BinarySearchTree<T>::size() noexcept -> size_t
     return size_;
 }
 
-template <typename T>		
-auto BinarySearchTree<T>::size_const() const noexcept -> size_t		
-{		
-    return size_;		
+/*
+template <typename T>
+auto BinarySearchTree<T>::size_const() const noexcept -> size_t
+{
+    return size_;
 }
+*/
 
 // вставка элемента в дерево
 template <typename T>
