@@ -59,6 +59,7 @@ public:
     auto Print (std::ostream & out,std::shared_ptr<Node> nd,int level) const noexcept -> void;       // распечатать дерево
     auto Print_file (std::ofstream & out,std::shared_ptr<Node> nd,int level) const noexcept -> void; // распечатать дерево
     auto size() noexcept -> size_t;                                                                  // определение размера
+    auto size_const() const noexcept -> size_t;
     auto insert(const T & value) noexcept -> bool;                                                   // вставка нового звена
     auto find(const T& value) const noexcept -> T*;                                                  // поиск элемента
     auto find_node(const T& value) const noexcept -> std::shared_ptr<Node>;                          // поиск элемента
