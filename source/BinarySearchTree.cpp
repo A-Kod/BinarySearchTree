@@ -138,7 +138,7 @@ auto BinarySearchTree<T>::remove_el(const T value) -> bool
     return true;
 }
 
-
+/*
 template<typename T>
 auto BinarySearchTree<T>::remove(const T& value) noexcept -> bool
 {
@@ -150,6 +150,7 @@ auto BinarySearchTree<T>::remove(const T& value) noexcept -> bool
 
     return false;
 }
+*/
 
 template<typename T>
 auto BinarySearchTree<T>::remove_helper(const T& value) noexcept -> bool
