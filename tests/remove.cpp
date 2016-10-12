@@ -39,8 +39,8 @@ SCENARIO("we must get two same trees_2")
 {
     GIVEN("two trees")
     {
-        tree1 = BinarySearchTree<int>({5, 2, 1});
-        tree2 = BinarySearchTree<int>({5, 2});
+        BinarySearchTree<int>({5, 2, 1}) tree1;
+        BinarySearchTree<int>({5, 2}) tree2;
         WHEN("node with only left child")
         {
             tree1.remove(2);
@@ -56,8 +56,8 @@ SCENARIO("we must get two same trees_3")
 {
     GIVEN("two trees")
     {
-        tree1 = BinarySearchTree<int>({5, 2, 1, 3});
-        tree2 = BinarySearchTree<int>({5, 2, 3});
+        BinarySearchTree<int>({5, 2, 1, 3}) tree1;
+        BinarySearchTree<int>({5, 2, 3}) tree2;
         WHEN("node with only right child")
         {
             tree1.remove(1);
@@ -73,8 +73,8 @@ SCENARIO("we must get two same trees_4")
 {
       GIVEN("two trees")
       {
-        tree1 = BinarySearchTree<int>({5, 2, 1, 3, 6, 7});
-        tree2 = BinarySearchTree<int>({5, 1, 3, 6, 7});
+        BinarySearchTree<int>({5, 2, 1, 3, 6, 7}) tree1;
+        BinarySearchTree<int>({5, 1, 3, 6, 7}) tree2;
         WHEN("node with both children")
         {
             tree1.remove(2);
@@ -90,8 +90,8 @@ SCENARIO("we must get two same trees_5")
 {
       GIVEN("two trees")
       {
-        tree1 = BinarySearchTree<int>({5});
-        tree2 = BinarySearchTree<int>();
+        BinarySearchTree<int>({5}) tree1;
+        BinarySearchTree<int>() tree2;
         WHEN("remove root")
         {
             tree1.remove(8);
@@ -107,8 +107,8 @@ SCENARIO("we must get two same trees_6")
 {
         GIVEN("two trees")
         {
-        tree1 = BinarySearchTree<int>({1, 2, 3, 4, 5});
-        tree2 = BinarySearchTree<int>({1, 2, 3, 4, 5});
+        BinarySearchTree<int>({1, 2, 3, 4, 5}) tree1;
+        BinarySearchTree<int>({1, 2, 3, 4, 5}) tree2;
         WHEN("remove node that doesn't exist")
           {
             tree1.remove(-1);
