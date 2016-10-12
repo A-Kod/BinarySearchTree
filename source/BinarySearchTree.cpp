@@ -152,47 +152,82 @@ auto BinarySearchTree<T>::remove(const T& value) noexcept -> bool
 }
 
 template<typename T>
-auto BinarySearchTree<T>::remove_helper(const T& value, std::shared_ptr<Node>& nd) noexcept -> bool
+auto BinarySearchTree<T>::remove_helper(const T& value) noexcept -> bool
 {
-    if (!nd)
-        return false;
+    // ищем искомый элемент в дереве
+    std::shared_ptr<Node> pointer = find_node(value);
 
-    if (value < nd->value_)
-        remove_helper(value, nd->left_);
-    if (value > nd->value_)
-        remove_helper(value, nd->right_);
-        //if (value == nd->value_)
-    else
+    // если не нашли - выходим
+    if(pointer == nullptr)
+        return 0;
+
+    // уменьшаем размерность дерева
+    size_--;
+
+    // идем по дереву, ищем удаляемый элемент и его родителя
+    std::shared_ptr<Node> parent = nullptr;
+    pointer = root_;
+
+
+    while (pointer && pointer->value_!=value)
     {
-        if (!nd->left_)
-            nd = nd->right_;
+        parent = pointer;
+        if (value < pointer->value_)
+            pointer = pointer->left_;
+        else
+            pointer = pointer->right_;
+    }
 
-        if (!nd->right_)
-            nd = nd->left_;
+    std::shared_ptr<Node> removed = nullptr;
 
+    // если хотя бы одна из веток отсутствует
+    if (pointer->left_ == nullptr || pointer->right_ == nullptr)
+    {
+        std::shared_ptr<Node> child = nullptr;
+        removed = pointer;
+
+        if (pointer->left_!= nullptr)
+            child = pointer->left_;
+        else if (pointer->right_!= nullptr)
+            child = pointer->right_;
+
+        // если родитель отсутствует, удаляемый элемент - корень
+        if (parent == nullptr)
+            root_ = child;
         else
         {
-            if (!nd->left_ && !nd->right_)
-            {
-                nd = nullptr;
-                return true;
-            }
-            if (nd->left_ && !nd->right_)
-            {
-                nd = nd->left_;
-                return true;
-            }
-            if (!nd->left_ && nd->right_)
-            {
-                nd = nd->right_;
-                return true;
-            }
+            if (parent->left_ == pointer)
+                parent->left_ = child;
             else
-            {
-                remove_el(value);
-            }
+                parent->right_ = child;
         }
     }
+    // если есть оба ребенка у удаляемого узла - ищем минимальное значение в правой ветке
+    else
+    {
+        std::shared_ptr<Node> mostLeft = pointer->right_;
+        std::shared_ptr<Node> mostLeftParent = pointer;
+
+        // перебираем дерево, пока не дойдем до крайнего левого (минимального) узла - в правой ветке
+        while (mostLeft->left_!= nullptr)
+        {
+            mostLeftParent = mostLeft;
+            mostLeft = mostLeft->left_;
+        }
+
+        // подставляем значение минимального в правой ветке - вместо pointer
+        pointer->value_ = mostLeft->value_;
+
+        removed = mostLeft;
+
+        // обнуляем соответствующие ветки
+        if (mostLeftParent->left_ == mostLeft)
+            mostLeftParent->left_ = nullptr;
+        else
+            mostLeftParent->right_ = mostLeft->right_;
+    }
+
+    removed.reset();
 
     return true;
 }
