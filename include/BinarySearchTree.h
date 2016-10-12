@@ -69,7 +69,7 @@ public:
     auto insert_rec(std::shared_ptr<Node> nd, const T& value) noexcept->void;
     auto is_equal(std::shared_ptr<Node> nd,const BinarySearchTree<T> & tree) const noexcept->bool;
     auto remove(const T& value) noexcept -> bool;
-    auto remove_helper(const T& value, std::shared_ptr<Node>& node) noexcept -> bool;
+    auto BinarySearchTree<T>::remove_helper(const T& value) noexcept -> bool
 
 
     friend auto operator >> <> (std::istream& in, BinarySearchTree<T>& tree)->std::istream&;
