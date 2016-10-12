@@ -7,7 +7,7 @@
 int main() {
 
     // создаем дерево с помощью списка инициализации
-    BinarySearchTree <int> tree ({1,2,3,4,5});
+    BinarySearchTree <int> tree ({5,2,1,3,6,7});
 
     // выводим дерево на печать
      std::cout << tree << std::endl;
@@ -21,7 +21,7 @@ int main() {
     std::cin >> del;
 
 
-    if(tree.remove_el(del))
+    if(tree.remove_helper(del))
     {
         std::cout << "The element is deleted" << std::endl;
     }
