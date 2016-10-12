@@ -94,7 +94,7 @@ SCENARIO("we must get two same trees_5")
         BinarySearchTree<int>tree2({1,3});
         WHEN("remove root")
         {
-            tree1.remove_helper(8);
+            tree1.remove_helper(5);
             THEN("trees must be equal")
             {
                 REQUIRE(tree1 == tree2);
