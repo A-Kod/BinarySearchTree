@@ -102,7 +102,7 @@ SCENARIO("we must get two same trees_5")
         }
       }
 }
-
+/*
 SCENARIO("we must get two same trees_6")
 {
         GIVEN("two trees")
@@ -119,3 +119,4 @@ SCENARIO("we must get two same trees_6")
           }
         }
 }
+*/
