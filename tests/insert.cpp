@@ -4,7 +4,7 @@
 
 SCENARIO("if obj is in tree, insert must return false") 
 {
-    GIVEN("tree")
+/*    GIVEN("tree")
     {
         BinarySearchTree<int> tree({1, 2, 3, 4});
         WHEN("insert element")
@@ -16,6 +16,7 @@ SCENARIO("if obj is in tree, insert must return false")
             }
         }
     }
+*/    
     GIVEN("tree, its size")
     {
         BinarySearchTree<int> tree({1, 2, 3, 4});
