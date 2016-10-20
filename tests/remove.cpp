@@ -102,21 +102,18 @@ SCENARIO("we must get two same trees_5")
         }
       }
 }
-/*
+
 SCENARIO("we must get two same trees_6")
 {
         GIVEN("two trees")
         {
         BinarySearchTree<int>tree1({1, 2, 3, 4, 5});
-        BinarySearchTree<int>tree2({1, 2, 3, 4, 5});
         WHEN("remove node that doesn't exist")
           {
-            tree1.remove_helper(0);
             THEN("trees must be equal")
             {
-                REQUIRE(tree1 == tree2);
+                REQUIRE_THROWS_AS(tree1.remove_helper(0), std::logic_error);
             }
           }
         }
 }
-*/
