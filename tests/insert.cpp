@@ -4,19 +4,18 @@
 
 SCENARIO("if obj is in tree, insert must return false") 
 {
-/*    GIVEN("tree")
+    GIVEN("tree")
     {
         BinarySearchTree<int> tree({1, 2, 3, 4});
         WHEN("insert element")
         {
-            THEN("sizes must be equal")
+            THEN("must throw error")
             {
-                REQUIRE(!tree.insert(1));           //false
-                REQUIRE(tree.insert(0));            //true
+                REQUIRE_THROWS_AS( tree.insert(1), std::logic_error );
             }
         }
     }
-*/    
+
     GIVEN("tree, its size")
     {
         BinarySearchTree<int> tree({1, 2, 3, 4});
@@ -29,14 +28,7 @@ SCENARIO("if obj is in tree, insert must return false")
                 REQUIRE(tree.size() == (size + 1));
             }
         }
-        /*WHEN("insert obj that is already in the tree")
-        {
-            tree.insert(3);
-            THEN("sizes must be equal")
-            {
-                REQUIRE(tree.size() == size);
-            }
-        }
-        */
+
+
     }    
 }
