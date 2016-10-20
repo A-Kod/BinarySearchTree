@@ -15,7 +15,7 @@ SCENARIO("if obj is in tree")
             }
         }
     }
-    GIVEN("tree") 
+/*    GIVEN("tree") 
     {
         BinarySearchTree<int> tree({1, 2, 3, 4, 5});
         WHEN("find") 
@@ -26,6 +26,7 @@ SCENARIO("if obj is in tree")
             }
         }
     }
+*/    
     GIVEN("constant tree") 
     {
         const BinarySearchTree<int> tree1({1, 2, 3});
