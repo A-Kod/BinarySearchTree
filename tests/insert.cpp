@@ -29,7 +29,7 @@ SCENARIO("if obj is in tree, insert must return false")
                 REQUIRE(tree.size() == (size + 1));
             }
         }
-        WHEN("insert obj that is already in the tree")
+        /*WHEN("insert obj that is already in the tree")
         {
             tree.insert(3);
             THEN("sizes must be equal")
@@ -37,5 +37,6 @@ SCENARIO("if obj is in tree, insert must return false")
                 REQUIRE(tree.size() == size);
             }
         }
+        */
     }    
 }
