@@ -160,7 +160,7 @@ auto BinarySearchTree<T>::remove_helper(const T& value) noexcept -> bool
 
     // если не нашли - выходим
     if(pointer == nullptr)
-        return 0;
+        throw std::logic_error("element wasn't found in remove func");
 
     // уменьшаем размерность дерева
     size_--;
@@ -347,7 +347,7 @@ auto BinarySearchTree<T>:: insert(const T & value) noexcept -> bool
     {
         if(value==current->value_)
         {
-            return false;
+            throw std::logic_error("element already exists");
         }
 
         if(value>current->value_)
@@ -398,7 +398,7 @@ auto BinarySearchTree<T>::find(const T& value) const noexcept -> T*
             return &current->value_;
     }
 
-    return nullptr;
+    throw std::logic_error("element wasn't found in find func");
 }
 
 // поиск узла в дереве
