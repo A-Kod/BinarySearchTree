@@ -15,18 +15,17 @@ SCENARIO("if obj is in tree")
             }
         }
     }
-/*    GIVEN("tree") 
+    GIVEN("tree")
     {
         BinarySearchTree<int> tree({1, 2, 3, 4, 5});
         WHEN("find") 
         {
-            THEN("return pointer to element must be nullptr") 
+            THEN("must throw error")
             {
-                REQUIRE(tree.find(7) == nullptr);
+                REQUIRE_THROWS_AS( tree.find(7), std::logic_error );
             }
         }
-    }
-*/    
+    }    
     GIVEN("constant tree") 
     {
         const BinarySearchTree<int> tree1({1, 2, 3});
