@@ -112,7 +112,7 @@ SCENARIO("we must get two same trees_6")
           {
             THEN("trees must be equal")
             {
-                REQUIRE_THROWS_AS(tree1.remove_helper(0), std::logic_error);
+                REQUIRE_THROWS_AS(tree1.remove_helper(0), bst_error);
             }
           }
         }
