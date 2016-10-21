@@ -3,6 +3,6 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/yo2ocyf9fiu446w0?svg=true)](https://ci.appveyor.com/project/A-Kod/binarysearchtree)
 
 
-![alt tag](http://auto.ferrari.com/en_EN/wp-content/uploads/sites/5/2013/07/Ferrari-F12berlinetta-front-end-1260x5701.jpg)
+![alt tag](https://images2.alphacoders.com/434/434132.jpg)
 
 ### BinarySearchTree
