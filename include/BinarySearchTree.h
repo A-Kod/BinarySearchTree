@@ -6,6 +6,13 @@
 #include <fstream>
 #include <memory>
 
+
+class bst_error : public std::logic_error {
+public:
+    explicit bst_error (const std::string& what_arg) : std::logic_error(what_arg) {};
+    explicit bst_error (const char* what_arg)  : std::logic_error(what_arg) {};
+};
+
 template <typename T>
 class BinarySearchTree;
 
@@ -60,8 +67,8 @@ public:
     auto Print_file (std::ofstream & out,std::shared_ptr<Node> nd,int level) const noexcept -> void; // распечатать дерево
     auto size() noexcept -> size_t;                                                                  // определение размера
     auto size_const() const noexcept -> size_t;
-    auto insert(const T & value) throw(std::logic_error) -> bool;                                                   // вставка нового звена
-    auto find(const T& value) const throw(std::logic_error) -> T*;                                                  // поиск элемента
+    auto insert(const T & value) throw(bst_error) -> bool;                                                   // вставка нового звена
+    auto find(const T& value) const throw(bst_error) -> T*;                                                  // поиск элемента
     auto find_node(const T& value) const noexcept -> std::shared_ptr<Node>;                          // поиск элемента
     auto operator = (const BinarySearchTree<T> & tree) -> BinarySearchTree<T> &;                     // оператор присваивания
     auto operator = (BinarySearchTree<T> && tree) -> BinarySearchTree<T> &;                          // оператор перемещения
@@ -69,7 +76,7 @@ public:
     auto insert_rec(std::shared_ptr<Node> nd, const T& value) noexcept->void;
     auto is_equal(std::shared_ptr<Node> nd,const BinarySearchTree<T> & tree) const noexcept->bool;
     auto remove(const T& value) noexcept -> bool;
-    auto remove_helper(const T& value) throw(std::logic_error) -> bool;
+    auto remove_helper(const T& value) throw(bst_error) -> bool;
 
 
     friend auto operator >> <> (std::istream& in, BinarySearchTree<T>& tree)->std::istream&;
