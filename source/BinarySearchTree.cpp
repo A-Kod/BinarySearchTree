@@ -6,12 +6,13 @@
 #include <memory>
 
 
-
+/*
 class bst_error : public std::logic_error {
 public:
     explicit bst_error (const std::string& what_arg) : std::logic_error(what_arg) {};
     explicit bst_error (const char* what_arg)  : std::logic_error(what_arg) {};
 };
+*/
 
 // конструктор по умолчанию
 template <typename T>
