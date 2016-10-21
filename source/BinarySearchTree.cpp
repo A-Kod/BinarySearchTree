@@ -6,13 +6,13 @@
 #include <memory>
 
 
-/*
+
 class bst_error : public std::logic_error {
 public:
     explicit bst_error (const std::string& what_arg) : std::logic_error(what_arg) {};
     explicit bst_error (const char* what_arg)  : std::logic_error(what_arg) {};
 };
-*/
+
 
 // конструктор по умолчанию
 template <typename T>
@@ -160,7 +160,7 @@ auto BinarySearchTree<T>::remove(const T& value) noexcept -> bool
 */
 
 template<typename T>
-auto BinarySearchTree<T>::remove_helper(const T& value) throw(bst_error) -> bool
+auto BinarySearchTree<T>::remove_helper(const T& value) throw(std::logic_error) -> bool
 {
     // ищем искомый элемент в дереве
     std::shared_ptr<Node> pointer = find_node(value);
@@ -336,7 +336,7 @@ auto BinarySearchTree<T>::size_const() const noexcept -> size_t
 
 // вставка элемента в дерево
 template <typename T>
-auto BinarySearchTree<T>:: insert(const T & value) throw(bst_error) -> bool
+auto BinarySearchTree<T>:: insert(const T & value) throw(std::logic_error) -> bool
 {
     // если дерево пустое - создаем корень
     if (root_== nullptr)
@@ -390,7 +390,7 @@ auto BinarySearchTree<T>:: insert(const T & value) throw(bst_error) -> bool
 
 // поиск элемента в дереве
 template<typename T>
-auto BinarySearchTree<T>::find(const T& value) const throw(bst_error) -> T*
+auto BinarySearchTree<T>::find(const T& value) const throw(std::logic_error) -> T*
 {
     std::shared_ptr<Node> current  = root_;
 
