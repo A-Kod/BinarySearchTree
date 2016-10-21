@@ -7,6 +7,12 @@
 
 
 
+class bst_error : public std::logic_error {
+public:
+    explicit bst_error (const std::string& what_arg) : std::logic_error(what_arg) {};
+    explicit bst_error (const char* what_arg)  : std::logic_error(what_arg) {};
+};
+
 // конструктор по умолчанию
 template <typename T>
 BinarySearchTree<T>::BinarySearchTree()
@@ -160,7 +166,7 @@ auto BinarySearchTree<T>::remove_helper(const T& value) throw(std::logic_error) 
 
     // если не нашли - выходим
     if(pointer == nullptr)
-        throw std::logic_error("element wasn't found in remove func");
+        throw bst_error("element wasn't found in remove func");
 
     // уменьшаем размерность дерева
     size_--;
@@ -347,7 +353,7 @@ auto BinarySearchTree<T>:: insert(const T & value) throw(std::logic_error) -> bo
     {
         if(value==current->value_)
         {
-            throw std::logic_error("element already exists");
+            throw bst_error("element already exists");
         }
 
         if(value>current->value_)
@@ -398,7 +404,7 @@ auto BinarySearchTree<T>::find(const T& value) const throw(std::logic_error) -> 
             return &current->value_;
     }
 
-    throw std::logic_error("element wasn't found in find func");
+    throw bst_error("element wasn't found in find func");
 }
 
 // поиск узла в дереве
