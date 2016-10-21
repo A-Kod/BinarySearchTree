@@ -159,7 +159,7 @@ auto BinarySearchTree<T>::remove(const T& value) noexcept -> bool
 */
 
 template<typename T>
-auto BinarySearchTree<T>::remove_helper(const T& value) throw(std::logic_error) -> bool
+auto BinarySearchTree<T>::remove_helper(const T& value) throw(bst_error) -> bool
 {
     // ищем искомый элемент в дереве
     std::shared_ptr<Node> pointer = find_node(value);
@@ -335,7 +335,7 @@ auto BinarySearchTree<T>::size_const() const noexcept -> size_t
 
 // вставка элемента в дерево
 template <typename T>
-auto BinarySearchTree<T>:: insert(const T & value) throw(std::logic_error) -> bool
+auto BinarySearchTree<T>:: insert(const T & value) throw(bst_error) -> bool
 {
     // если дерево пустое - создаем корень
     if (root_== nullptr)
@@ -389,7 +389,7 @@ auto BinarySearchTree<T>:: insert(const T & value) throw(std::logic_error) -> bo
 
 // поиск элемента в дереве
 template<typename T>
-auto BinarySearchTree<T>::find(const T& value) const throw(std::logic_error) -> T*
+auto BinarySearchTree<T>::find(const T& value) const throw(bst_error) -> T*
 {
     std::shared_ptr<Node> current  = root_;
 
