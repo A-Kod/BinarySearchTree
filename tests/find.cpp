@@ -22,7 +22,7 @@ SCENARIO("if obj is in tree")
         {
             THEN("must throw error")
             {
-                REQUIRE_THROWS_AS( tree.find(7), std::logic_error );
+                REQUIRE_THROWS_AS( tree.find(7), bst_error );
             }
         }
     }    
