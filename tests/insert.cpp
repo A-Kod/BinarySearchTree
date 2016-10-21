@@ -11,7 +11,7 @@ SCENARIO("if obj is in tree, insert must return false")
         {
             THEN("must throw error")
             {
-                REQUIRE_THROWS_AS( tree.insert(1), std::logic_error );
+                REQUIRE_THROWS_AS( tree.insert(1), bst_error );
             }
         }
     }
