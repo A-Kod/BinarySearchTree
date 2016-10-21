@@ -20,7 +20,7 @@ int main() {
         try {
         tree.find(1);
         }
-        catch (std::logic_error &e) {
+        catch (bst_error &e) {
             std::cout << e.what();
         }
 
@@ -28,7 +28,7 @@ int main() {
         tree.insert(9);
         }
 
-        catch (std::logic_error &e) {
+        catch (bst_error &e) {
         std::cout << e.what();
         }
 
@@ -42,7 +42,7 @@ int main() {
         }
         }
 
-        catch (std::logic_error &e) {
+        catch (bst_error &e) {
         std::cout << e.what();
         }
 
@@ -56,7 +56,5 @@ int main() {
 
     return 0;
 }
-
-
 
 
